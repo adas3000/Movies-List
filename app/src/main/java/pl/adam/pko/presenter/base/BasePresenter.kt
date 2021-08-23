@@ -17,7 +17,7 @@ abstract class BasePresenter<T : MvpView> : Presenter<T>, CoroutineScope, DIAwar
     private val job: Job = Job()
 
     override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.IO
+        get() = job + Dispatchers.Main
 
     private var _view: T? = null
     protected val view: T

@@ -1,5 +1,8 @@
 package pl.adam.pko.presenter.movies_list
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.kodein.di.instance
 import pl.adam.pko.model.interactor.movies_list.IMoviesListInteractor
 import pl.adam.pko.presenter.base.BasePresenter
@@ -11,6 +14,12 @@ class MoviesListPresenter : BasePresenter<MoviesListView>(), IMoviesListPresente
 
     override fun attachView(view: MoviesListView) {
         super.attachView(view)
+        launch {
+            val movies = interactor.getNowPlayingMovies()
+            withContext(Dispatchers.Main) {
+                view.showMovies(movies)
+            }
+        }
     }
 
 }
