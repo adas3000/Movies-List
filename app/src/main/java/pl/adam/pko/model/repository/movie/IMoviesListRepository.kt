@@ -5,4 +5,5 @@ import pl.adam.pko.model.repository.Repository
 
 interface IMoviesListRepository : Repository {
     suspend fun getNowPlayingMoviesList(page: Int): List<Movie>
+    suspend fun getQueryMovies(query: String, page: Int): List<Movie>
 }

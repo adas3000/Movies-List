@@ -9,9 +9,13 @@ class MoviesListInteractor(
 ) :
     IMoviesListInteractor {
     override suspend fun getNowPlayingMovies(page: Int) =
-        moviesListRepository.getNowPlayingMoviesList(page).onEach { it.favorite = favoritesMoviesPreferences.isFavorite(it.id) }
+        moviesListRepository.getNowPlayingMoviesList(page)
+            .onEach { it.favorite = favoritesMoviesPreferences.isFavorite(it.id) }
 
     override fun saveMovieFavorite(id: Int, favorite: Boolean) {
         favoritesMoviesPreferences.setFavorite(id, favorite)
     }
+
+    override suspend fun getQueryMovies(query: String, page: Int) =
+        moviesListRepository.getQueryMovies(query, page)
 }

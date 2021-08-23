@@ -29,6 +29,25 @@ class MoviesListPresenter : BasePresenter<MoviesListView>(), IMoviesListPresente
             )
             view.refreshList(index)
         }
+        view.setOnSearchQueryChanged {
+            launch {
+                val titles = interactor.getQueryMovies(query = it, page = 1).map { it.title }
+                withContext(Dispatchers.Main) {
+                    view.setQueryListVisibility(visible = true)
+                    view.showHints(titles)
+                }
+            }
+        }
+        view.setOnSearchQueryClickListener {
+            launch {
+                val movies = interactor.getQueryMovies(it, page = 1)
+                withContext(Dispatchers.Main) {
+//                    view.setSearchQueryText(text = it)
+                    view.setQueryListVisibility(visible = false)
+                    view.showMovies(movies)
+                }
+            }
+        }
     }
 
     private fun load() {

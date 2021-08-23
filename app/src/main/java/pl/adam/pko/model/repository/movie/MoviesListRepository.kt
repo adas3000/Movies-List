@@ -21,4 +21,21 @@ class MoviesListRepository(private val apiService: ApiService) : IMoviesListRepo
                 voteCount = it.voteCount
             )
         }
+
+    override suspend fun getQueryMovies(query: String, page: Int) =
+        apiService.getQueryMovies(query, page).results.map {
+            Movie(
+                id = it.id,
+                adult = it.adult,
+                backDropPath = "${BuildConfig.IMAGES_URL}${it.backDropPath}",
+                overview = it.overview,
+                popularity = it.popularity,
+                posterUrl = "${BuildConfig.IMAGES_URL}${it.posterUrl}",
+                releaseDate = it.releaseDate,
+                title = it.title,
+                video = it.video,
+                voteAverage = it.voteAverage,
+                voteCount = it.voteCount
+            )
+        }
 }

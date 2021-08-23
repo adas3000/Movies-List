@@ -5,5 +5,6 @@ import pl.adam.pko.model.model.Movie
 
 interface IMoviesListInteractor : Interactor {
     suspend fun getNowPlayingMovies(page: Int = 1): List<Movie>
+    suspend fun getQueryMovies(query: String, page: Int): List<Movie>
     fun saveMovieFavorite(id: Int, favorite: Boolean)
 }
