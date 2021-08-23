@@ -7,6 +7,7 @@ class MovieDetailsPresenter : BasePresenter<MovieDetailsView>(), IMovieDetailsPr
 
     override fun attachView(view: MovieDetailsView) {
         super.attachView(view)
+        view.setOnBackClickListener { view.close()  }
         view.showMovie(view.passedMovie())
     }
 

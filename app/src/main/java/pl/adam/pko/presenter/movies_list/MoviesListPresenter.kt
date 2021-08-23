@@ -5,6 +5,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kodein.di.instance
 import pl.adam.pko.model.interactor.movies_list.IMoviesListInteractor
+import pl.adam.pko.model.model.Movie
 import pl.adam.pko.presenter.base.BasePresenter
 import pl.adam.pko.view.view.MoviesListView
 
@@ -14,8 +15,20 @@ class MoviesListPresenter : BasePresenter<MoviesListView>(), IMoviesListPresente
 
     override fun attachView(view: MoviesListView) {
         super.attachView(view)
-        view.setOnMovieClickListener { view.showMovieDetails(it) }
+        setActions()
         load()
+    }
+
+    private fun setActions() {
+        view.setOnMovieImageClickListener { view.showMovieDetails(it) }
+        view.setOnMovieStarClickListener { movie: Movie, index: Int ->
+            movie.favorite = movie.favorite.not()
+            interactor.saveMovieFavorite(
+                id = movie.id,
+                favorite = movie.favorite
+            )
+            view.refreshList(index)
+        }
     }
 
     private fun load() {

@@ -7,11 +7,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import pl.adam.pko.BuildConfig
 import pl.adam.pko.R
 import pl.adam.pko.model.model.Movie
 
-class MovieAdapter(private val movieList: List<Movie>, private val onClick: (movie: Movie) -> Unit) :
+class MovieAdapter(
+    private val movieList: List<Movie>,
+    private val onImageClick: (movie: Movie) -> Unit,
+    private val onFavoriteClick: (movie: Movie, index: Int) -> Unit
+) :
     RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -23,7 +26,15 @@ class MovieAdapter(private val movieList: List<Movie>, private val onClick: (mov
         Glide.with(viewHolder.itemView)
             .load(movieList[position].posterUrl)
             .into(viewHolder.imgIV)
-        viewHolder.imgIV.setOnClickListener { onClick(movieList[position]) }
+        viewHolder.imgIV.setOnClickListener { onImageClick(movieList[position]) }
+        viewHolder.favoriteIV.setOnClickListener { onFavoriteClick(movieList[position], position) }
+        viewHolder.favoriteIV.setImageResource(
+            if (movieList[position].favorite) {
+                R.drawable.ic_favorite
+            } else {
+                R.drawable.ic_un_favorite
+            }
+        )
     }
 
     override fun getItemCount() = movieList.size
@@ -32,6 +43,7 @@ class MovieAdapter(private val movieList: List<Movie>, private val onClick: (mov
         val titleTV: TextView = view.findViewById(R.id.titleTV)
         val releaseDateTV: TextView = view.findViewById(R.id.releaseDateTV)
         val imgIV: ImageView = view.findViewById(R.id.imgIV)
+        val favoriteIV: ImageView = view.findViewById(R.id.favoriteIV)
     }
 
 }

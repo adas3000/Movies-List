@@ -20,19 +20,33 @@ class MoviesListActivity : BaseActivity<MoviesListView>(), MoviesListView {
 
     override fun getMvpView() = this
 
-    private var onMovieClickListener = { _: Movie -> }
+    private var onMovieImageClickListener = { _: Movie -> }
+
+    private var onMovieStarClickListener = { _: Movie, _: Int -> }
 
     override fun showMovies(movies: List<Movie>) {
-        itemsRV.adapter = MovieAdapter(movies) { onMovieClickListener(it) }
+        itemsRV.adapter =
+            MovieAdapter(
+                movies,
+                { onMovieImageClickListener(it) },
+                { movie: Movie, index: Int -> onMovieStarClickListener(movie, index) })
     }
 
-    override fun setOnMovieClickListener(onMovieClickListener: (movie: Movie) -> Unit) {
-        this.onMovieClickListener = onMovieClickListener
+    override fun setOnMovieStarClickListener(onMovieStarClickListener: (movie: Movie, index: Int) -> Unit) {
+        this.onMovieStarClickListener = onMovieStarClickListener
+    }
+
+    override fun setOnMovieImageClickListener(onMovieImageClickListener: (movie: Movie) -> Unit) {
+        this.onMovieImageClickListener = onMovieImageClickListener
     }
 
     override fun showMovieDetails(movie: Movie) {
         startActivity(Intent(this, MovieDetailsActivity::class.java).apply {
             putExtra(MovieDetailsActivity.MOVIE_KEY, Gson().toJson(movie))
         })
+    }
+
+    override fun refreshList(index: Int) {
+        itemsRV.adapter?.notifyItemChanged(index)
     }
 }

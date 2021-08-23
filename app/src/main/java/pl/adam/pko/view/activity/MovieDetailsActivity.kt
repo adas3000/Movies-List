@@ -1,5 +1,6 @@
 package pl.adam.pko.view.activity
 
+import android.view.MenuItem
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_movie_details.*
@@ -21,7 +22,10 @@ class MovieDetailsActivity : BaseActivity<MovieDetailsView>(), MovieDetailsView 
 
     override fun getLayoutRes() = R.layout.activity_movie_details
 
+    private var onBackClickListener = {}
+
     override fun setupView() {
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         movie = Gson().fromJson(intent.extras?.getString(MOVIE_KEY), Movie::class.java)
     }
 
@@ -30,11 +34,27 @@ class MovieDetailsActivity : BaseActivity<MovieDetailsView>(), MovieDetailsView 
     override fun getMvpView() = this
 
     override fun showMovie(movie: Movie) {
-        actionBar?.title = movie.title
+        supportActionBar?.title = movie.title
         Glide.with(this).load(movie.posterUrl).into(imgIV)
         titleTV.text = movie.title
         releaseDateTV.text = "Premiera: ${movie.releaseDate}"
         overviewTV.text = movie.overview
         rateTV.text = "Ocena: ${movie.voteAverage}"
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == android.R.id.home) {
+            onBackClickListener()
+            true
+        } else
+            super.onOptionsItemSelected(item)
+    }
+
+    override fun setOnBackClickListener(onBackClickListener: () -> Unit) {
+        this.onBackClickListener = onBackClickListener
+    }
+
+    override fun close() {
+        finish()
     }
 }
