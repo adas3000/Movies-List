@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import pl.adam.pko.BuildConfig
 import pl.adam.pko.R
 import pl.adam.pko.model.model.Movie
 
@@ -17,6 +19,7 @@ class MovieAdapter(private val movieList: List<Movie>) :
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.titleTV.text = movieList[position].title
+        Glide.with(viewHolder.itemView).load("${BuildConfig.IMAGES_URL}${movieList[position].posterUrl}").into(viewHolder.imgIV)
     }
 
     override fun getItemCount() = movieList.size
