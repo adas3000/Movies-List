@@ -8,6 +8,8 @@ import pl.adam.pko.model.interactor.movies_list.MoviesListInteractor
 import pl.adam.pko.model.network.service.ApiService
 import pl.adam.pko.model.repository.movie.IMoviesListRepository
 import pl.adam.pko.model.repository.movie.MoviesListRepository
+import pl.adam.pko.presenter.movie_details.IMovieDetailsPresenter
+import pl.adam.pko.presenter.movie_details.MovieDetailsPresenter
 import pl.adam.pko.presenter.movies_list.IMoviesListPresenter
 import pl.adam.pko.presenter.movies_list.MoviesListPresenter
 import pl.adam.pko.util.di.RetrofitProvider
@@ -23,9 +25,10 @@ class App : Application(), DIAware {
     override val di by DI.lazy {
         import(androidXModule(this@App))
         bind<ApiService>() with singleton { RetrofitProvider.retrofit.create(ApiService::class.java) }
-        bind<IMoviesListPresenter>() with singleton { MoviesListPresenter() }
         bind<IMoviesListRepository>() with singleton { MoviesListRepository(instance()) }
         bind<IMoviesListInteractor>() with singleton { MoviesListInteractor(instance()) }
+        bind<IMovieDetailsPresenter>() with singleton { MovieDetailsPresenter() }
+        bind<IMoviesListPresenter>() with singleton { MoviesListPresenter() }
     }
 
     override fun onCreate() {

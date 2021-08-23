@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Movies List</string>
+    <string name="hello_world">Hello Square World!</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi in fermentum lorem. Phasellus cursus dui vitae neque tincidunt dictum. Quisque at porta ligula. Nam in risus at ex gravida rhoncus. Vivamus quis erat vel ipsum mollis accumsan vitae nec turpis. Integer tincidunt nisl est, non ultrices neque rhoncus non. Suspendisse potenti.</string>
 </resources>

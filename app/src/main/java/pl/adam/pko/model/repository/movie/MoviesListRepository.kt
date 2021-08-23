@@ -1,5 +1,6 @@
 package pl.adam.pko.model.repository.movie
 
+import pl.adam.pko.BuildConfig
 import pl.adam.pko.model.model.Movie
 import pl.adam.pko.model.network.service.ApiService
 
@@ -9,10 +10,10 @@ class MoviesListRepository(private val apiService: ApiService) : IMoviesListRepo
             Movie(
                 id = it.id,
                 adult = it.adult,
-                backDropPath = it.backDropPath,
+                backDropPath = "${BuildConfig.IMAGES_URL}${it.backDropPath}",
                 overview = it.overview,
                 popularity = it.popularity,
-                posterUrl = it.posterUrl,
+                posterUrl = "${BuildConfig.IMAGES_URL}${it.posterUrl}",
                 releaseDate = it.releaseDate,
                 title = it.title,
                 video = it.video,

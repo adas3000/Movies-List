@@ -14,6 +14,11 @@ class MoviesListPresenter : BasePresenter<MoviesListView>(), IMoviesListPresente
 
     override fun attachView(view: MoviesListView) {
         super.attachView(view)
+        view.setOnMovieClickListener { view.showMovieDetails(it) }
+        load()
+    }
+
+    private fun load() {
         launch {
             val movies = interactor.getNowPlayingMovies()
             withContext(Dispatchers.Main) {

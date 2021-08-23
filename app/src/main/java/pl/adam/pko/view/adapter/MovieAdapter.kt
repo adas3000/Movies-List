@@ -11,7 +11,7 @@ import pl.adam.pko.BuildConfig
 import pl.adam.pko.R
 import pl.adam.pko.model.model.Movie
 
-class MovieAdapter(private val movieList: List<Movie>) :
+class MovieAdapter(private val movieList: List<Movie>, private val onClick: (movie: Movie) -> Unit) :
     RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -19,13 +19,18 @@ class MovieAdapter(private val movieList: List<Movie>) :
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.titleTV.text = movieList[position].title
-        Glide.with(viewHolder.itemView).load("${BuildConfig.IMAGES_URL}${movieList[position].posterUrl}").into(viewHolder.imgIV)
+        viewHolder.releaseDateTV.text = "Premiera: ${movieList[position].releaseDate}"
+        Glide.with(viewHolder.itemView)
+            .load(movieList[position].posterUrl)
+            .into(viewHolder.imgIV)
+        viewHolder.imgIV.setOnClickListener { onClick(movieList[position]) }
     }
 
     override fun getItemCount() = movieList.size
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleTV: TextView = view.findViewById(R.id.titleTV)
+        val releaseDateTV: TextView = view.findViewById(R.id.releaseDateTV)
         val imgIV: ImageView = view.findViewById(R.id.imgIV)
     }
 
