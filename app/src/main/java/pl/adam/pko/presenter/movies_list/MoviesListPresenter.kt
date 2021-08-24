@@ -15,8 +15,6 @@ class MoviesListPresenter : BasePresenter<MoviesListView>(), IMoviesListPresente
 
     private val interactor by instance<IMoviesListInteractor>()
 
-    private var searchQueryClicked = false
-
     override fun attachView(view: MoviesListView) {
         super.attachView(view)
         setActions()
@@ -50,10 +48,8 @@ class MoviesListPresenter : BasePresenter<MoviesListView>(), IMoviesListPresente
         }
         view.setOnSearchQueryClickListener {
             launch {
-                searchQueryClicked = true
                 val movies = interactor.getQueryMovies(it, page = 1)
                 withContext(Dispatchers.Main) {
-                    view.setSearchQueryText(text = it)
                     view.setQueryListVisibility(visible = false)
                     movies.onSuccess { view.showMovies(it) }
                 }
