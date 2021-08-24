@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import org.kodein.di.*
 import org.kodein.di.android.x.androidXModule
+import pl.adam.pko.model.interactor.movie_details.IMovieDetailsInteractor
+import pl.adam.pko.model.interactor.movie_details.MovieDetailsInteractor
 import pl.adam.pko.model.interactor.movies_list.IMoviesListInteractor
 import pl.adam.pko.model.interactor.movies_list.MoviesListInteractor
 import pl.adam.pko.model.network.service.ApiService
@@ -33,6 +35,7 @@ class App : Application(), DIAware {
             )
         }
         bind<IMoviesListRepository>() with singleton { MoviesListRepository(instance()) }
+        bind<IMovieDetailsInteractor>() with singleton { MovieDetailsInteractor(instance()) }
         bind<IMoviesListInteractor>() with singleton {
             MoviesListInteractor(
                 instance(),
