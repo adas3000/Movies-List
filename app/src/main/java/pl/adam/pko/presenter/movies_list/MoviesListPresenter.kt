@@ -15,6 +15,8 @@ class MoviesListPresenter : BasePresenter<MoviesListView>(), IMoviesListPresente
 
     private val interactor by instance<IMoviesListInteractor>()
 
+    private var searchQueryClicked = false
+
     override fun attachView(view: MoviesListView) {
         super.attachView(view)
         setActions()
@@ -31,21 +33,27 @@ class MoviesListPresenter : BasePresenter<MoviesListView>(), IMoviesListPresente
             )
             view.refreshList(index)
         }
-        view.setOnSearchQueryChanged {
+        view.setOnSearchQueryChanged { query ->
             launch {
-                val titles = interactor.getQueryMovies(query = it, page = 1)
-                    .map { it.map { movie -> movie.title } }
-                withContext(Dispatchers.Main) {
-                    view.setQueryListVisibility(visible = true)
-                    titles.onSuccess { view.showHints(it) }
+                if (query.isEmpty()) {
+                    load()
+                } else {
+                    val movies = interactor.getQueryMovies(query = query, page = 1)
+                    val titles = movies.map { it.map { movie -> movie.title } }
+                    withContext(Dispatchers.Main) {
+                        view.setQueryListVisibility(visible = true)
+                        movies.onSuccess { view.showMovies(it) }
+                        titles.onSuccess { view.showHints(it) }
+                    }
                 }
             }
         }
         view.setOnSearchQueryClickListener {
             launch {
+                searchQueryClicked = true
                 val movies = interactor.getQueryMovies(it, page = 1)
                 withContext(Dispatchers.Main) {
-//                    view.setSearchQueryText(text = it)
+                    view.setSearchQueryText(text = it)
                     view.setQueryListVisibility(visible = false)
                     movies.onSuccess { view.showMovies(it) }
                 }
