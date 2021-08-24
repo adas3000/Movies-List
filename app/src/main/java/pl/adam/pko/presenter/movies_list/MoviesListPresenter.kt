@@ -6,6 +6,8 @@ import kotlinx.coroutines.withContext
 import org.kodein.di.instance
 import pl.adam.pko.model.interactor.movies_list.IMoviesListInteractor
 import pl.adam.pko.model.model.Movie
+import pl.adam.pko.model.network.response.map
+import pl.adam.pko.model.network.response.onSuccess
 import pl.adam.pko.presenter.base.BasePresenter
 import pl.adam.pko.view.view.MoviesListView
 
@@ -31,10 +33,11 @@ class MoviesListPresenter : BasePresenter<MoviesListView>(), IMoviesListPresente
         }
         view.setOnSearchQueryChanged {
             launch {
-                val titles = interactor.getQueryMovies(query = it, page = 1).map { it.title }
+                val titles = interactor.getQueryMovies(query = it, page = 1)
+                    .map { it.map { movie -> movie.title } }
                 withContext(Dispatchers.Main) {
                     view.setQueryListVisibility(visible = true)
-                    view.showHints(titles)
+                    titles.onSuccess { view.showHints(it) }
                 }
             }
         }
@@ -44,7 +47,7 @@ class MoviesListPresenter : BasePresenter<MoviesListView>(), IMoviesListPresente
                 withContext(Dispatchers.Main) {
 //                    view.setSearchQueryText(text = it)
                     view.setQueryListVisibility(visible = false)
-                    view.showMovies(movies)
+                    movies.onSuccess { view.showMovies(it) }
                 }
             }
         }
@@ -54,7 +57,7 @@ class MoviesListPresenter : BasePresenter<MoviesListView>(), IMoviesListPresente
         launch {
             val movies = interactor.getNowPlayingMovies()
             withContext(Dispatchers.Main) {
-                view.showMovies(movies)
+                movies.onSuccess { view.showMovies(it) }
             }
         }
     }
