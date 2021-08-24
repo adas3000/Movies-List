@@ -53,6 +53,7 @@ class MovieDetailsActivity : BaseActivity<MovieDetailsView>(), MovieDetailsView 
                 R.drawable.ic_un_favorite
             }
         )
+
     }
 
     override fun setOnFavoriteClickListener(onFavoriteClickListener: () -> Unit) {
@@ -60,8 +61,8 @@ class MovieDetailsActivity : BaseActivity<MovieDetailsView>(), MovieDetailsView 
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.menu_movie_details, menu)
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.menu_movie_details, menu)
         this.menu = menu
         return true
     }
